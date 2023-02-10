@@ -8,8 +8,8 @@ export default function userInput(req, res) {
 
     return res.json({ msg: "Success" });
   }
-
-  return res.status(500).json({
-    msg: "Error, This need to be a respond",
+  
+  return res.status(400).json({
+    msg: "Error 400: Bad Request",
   });
 }
