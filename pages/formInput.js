@@ -13,6 +13,8 @@ import {
   Text,
   useColorModeValue,
   Link,
+  FormHelperText,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
@@ -21,6 +23,10 @@ export default function FormInput() {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [mobile, setmobile] = useState("");
+
+  const isEmailError = email === "";
+  const isNameError = name === "";
+  const isMobileError = mobile === "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,6 +51,8 @@ export default function FormInput() {
       console.log("Error:", error);
     }
   };
+
+  
 
   return (
     <Flex
@@ -79,6 +87,13 @@ export default function FormInput() {
                     required
                     onChange={(e) => setname(e.target.value)}
                   />
+                  {!isNameError ? (
+                <FormHelperText>
+                  Please enter fullname
+                </FormHelperText>
+              ) : (
+                <FormErrorMessage>Name is not valid.</FormErrorMessage>
+              )}
                 </FormControl>
               </Box>
             </HStack>
@@ -91,6 +106,13 @@ export default function FormInput() {
                 required
                 onChange={(e) => setemail(e.target.value)}
               />
+              {!isEmailError ? (
+                <FormHelperText>
+                  Please enter valid email address
+                </FormHelperText>
+              ) : (
+                <FormErrorMessage>Email is not valid.</FormErrorMessage>
+              )}
             </FormControl>
             <FormControl id="mobile" isRequired>
               <FormLabel>Mobile Number</FormLabel>
@@ -101,6 +123,13 @@ export default function FormInput() {
                 required
                 onChange={(e) => setmobile(e.target.value)}
               />
+              {!isMobileError ? (
+                <FormHelperText>
+                  Please enter Mobile Number
+                </FormHelperText>
+              ) : (
+                <FormErrorMessage>Mobile Number is not valid.</FormErrorMessage>
+              )}
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
