@@ -42,7 +42,7 @@ export default function FormInput() {
 
       console.log("Response Back:", data);
     } catch (error) {
-      console.log("Error:", data);
+      console.log("Error:", error);
     }
   };
 
