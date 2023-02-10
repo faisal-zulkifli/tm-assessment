@@ -1,10 +1,12 @@
+
+
 export default function userInput(req, res) {
   if (req.method === "POST") {
     const reqPayload = req?.body;
 
     console.log("Req Payload", reqPayload);
 
-    res.json({ msg: "Test" });
+    return res.json({ msg: "Success" });
   }
 
   return res.status(500).json({

@@ -34,7 +34,7 @@ export default function FormInput() {
     console.log("Payload: ", userPayload);
 
     try {
-      const {data} = await axios({
+      const { data } = await axios({
         url: "/api/userInput",
         method: "POST",
         data: userPayload,
