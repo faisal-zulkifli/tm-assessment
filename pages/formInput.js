@@ -18,12 +18,11 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function FormInput() {
-  
-  const [name, setname] = useState(""); 
+  const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [mobile, setmobile] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userPayload = {
@@ -31,22 +30,19 @@ export default function FormInput() {
       email,
       mobile,
     };
-    
+
     console.log("Payload: ", userPayload);
 
     try {
-      const responseData = axios ({
-        url: "",
-        method:"POST",
-        data: userPayload
-
+      const {data} = await axios({
+        url: "api/userInput",
+        method: "POST",
+        data: userPayload,
       });
 
       console.log("Response Back:", data);
     } catch (error) {
-
       console.log("Error:", data);
-
     }
   };
 
@@ -76,7 +72,7 @@ export default function FormInput() {
             <HStack>
               <Box>
                 <FormControl id="firstName" isRequired>
-                  <FormLabel> Name</FormLabel>                  
+                  <FormLabel> Name</FormLabel>
                   <Input
                     type="text"
                     value={name}
@@ -84,7 +80,7 @@ export default function FormInput() {
                     onChange={(e) => setname(e.target.value)}
                   />
                 </FormControl>
-              </Box>              
+              </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
