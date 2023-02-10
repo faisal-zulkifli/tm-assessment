@@ -23,20 +23,32 @@ export default function FormInput() {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [mobile, setmobile] = useState("");
-
-  const isEmailError = email === "";
-  const isNameError = name === "";
-  const isMobileError = mobile === "";
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (/[^A-Za-z_'-, ]/gi.test(name)) {
+      alert("Invalid name format! Numbers is not allowed");      
+    } else if (!/\S+@\S+\.\S+/i.test(email)) {
+      alert("Invalid email format!");
+    } else if (!/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/.test(mobile)) {
+      alert(
+        "Invalid contact number format! Only numbers with length of 10 are allowed"
+      );
+    } else if (!name || !email || !mobile) {
+      alert("All field is required!");
+    } else {
+      alert("success");
+      setError("");
+    }
 
     const userPayload = {
       name,
       email,
       mobile,
     };
-
     console.log("Payload: ", userPayload);
 
     try {
@@ -45,14 +57,14 @@ export default function FormInput() {
         method: "POST",
         data: userPayload,
       });
+      setIsLoading(false);
 
       console.log("Response Back:", data);
     } catch (error) {
+      setIsLoading(true);
       console.log("Error:", error);
     }
   };
-
-  
 
   return (
     <Flex
@@ -76,6 +88,7 @@ export default function FormInput() {
           boxShadow={"lg"}
           p={8}
         >
+          {error && <h3 style={{ color: "red" }}>{error}</h3>}
           <Stack spacing={4}>
             <HStack>
               <Box>
@@ -87,13 +100,6 @@ export default function FormInput() {
                     required
                     onChange={(e) => setname(e.target.value)}
                   />
-                  {!isNameError ? (
-                <FormHelperText>
-                  Please enter fullname
-                </FormHelperText>
-              ) : (
-                <FormErrorMessage>Name is not valid.</FormErrorMessage>
-              )}
                 </FormControl>
               </Box>
             </HStack>
@@ -106,13 +112,6 @@ export default function FormInput() {
                 required
                 onChange={(e) => setemail(e.target.value)}
               />
-              {!isEmailError ? (
-                <FormHelperText>
-                  Please enter valid email address
-                </FormHelperText>
-              ) : (
-                <FormErrorMessage>Email is not valid.</FormErrorMessage>
-              )}
             </FormControl>
             <FormControl id="mobile" isRequired>
               <FormLabel>Mobile Number</FormLabel>
@@ -123,13 +122,6 @@ export default function FormInput() {
                 required
                 onChange={(e) => setmobile(e.target.value)}
               />
-              {!isMobileError ? (
-                <FormHelperText>
-                  Please enter Mobile Number
-                </FormHelperText>
-              ) : (
-                <FormErrorMessage>Mobile Number is not valid.</FormErrorMessage>
-              )}
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
