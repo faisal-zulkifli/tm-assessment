@@ -24,13 +24,18 @@ export default function FormInput() {
   const [email, setemail] = useState("");
   const [mobile, setmobile] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault();    
+
+    const userPayload = {
+      name,
+      email,
+      mobile,
+    };
 
     if (/[^A-Za-z_'-, ]/gi.test(name)) {
-      alert("Invalid name format! Numbers is not allowed");      
+      alert("Invalid name format! Numbers is not allowed");
     } else if (!/\S+@\S+\.\S+/i.test(email)) {
       alert("Invalid email format!");
     } else if (!/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/.test(mobile)) {
@@ -41,29 +46,19 @@ export default function FormInput() {
       alert("All field is required!");
     } else {
       alert("success");
-      setError("");
-    }
+      try {
+        const { data } = await axios({
+          url: "/api/userInput",
+          method: "POST",
+          data: userPayload,
+        });
 
-    const userPayload = {
-      name,
-      email,
-      mobile,
-    };
+        console.log("Response Back:", data);
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    }
     console.log("Payload: ", userPayload);
-
-    try {
-      const { data } = await axios({
-        url: "/api/userInput",
-        method: "POST",
-        data: userPayload,
-      });
-      setIsLoading(false);
-
-      console.log("Response Back:", data);
-    } catch (error) {
-      setIsLoading(true);
-      console.log("Error:", error);
-    }
   };
 
   return (
